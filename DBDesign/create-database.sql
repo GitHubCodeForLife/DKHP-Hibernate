@@ -115,8 +115,6 @@ create table SINH_VIEN
    primary key (MASV)
 );
 
-alter table HOC_KI add constraint FK_HOC_KI_RELATIONS_GIAO_VU foreign key (TKGV)
-      references GIAO_VU (TKGV) on delete restrict on update restrict;
 
 alter table HOC_PHAN add constraint FK_HOC_PHAN_CO_MON_HOC foreign key (MAMH)
       references MON_HOC (MAMH) on delete restrict on update restrict;
@@ -130,7 +128,7 @@ alter table HOC_PHAN add constraint FK_HOC_PHAN_RELATIONS_DOT_DK_H foreign key (
 -- alter table HOC_PHAN add constraint FK_HOC_PHAN_THUOC_LOP foreign key (MALOP)
 --       references LOP (MALOP) on delete restrict on update restrict;
 
-alter table KQDKHP add constraint FK_KQDKHP_RELATIONS_SINH_VIE foreign key (MASV)
+alter table KQDKHP add constraint FK_KQDKHP_RELATIONS_SINH_VIEN foreign key (MASV)
       references SINH_VIEN (MASV) on delete restrict on update restrict;
 
 alter table KQDKHP add constraint FK_KQDKHP_RELATIONS_HOC_PHAN foreign key (MAHP)
