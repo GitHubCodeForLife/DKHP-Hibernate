@@ -17,6 +17,7 @@ drop table if exists SINH_VIEN;
 create table DOT_DK_HP
 (
    MADOT                varchar(30) not null  comment '',
+   MAHOCKI              varchar(30) not null  comment '',
    STTDOT               int not null  comment '',
    TGBATDAU             datetime  comment '',
    TGKETTHUC            datetime  comment '',
@@ -42,7 +43,7 @@ create table GIAO_VU
 create table HOC_KI
 (
    MAHOCKI              varchar(30) not null  comment '',
-   TKGV                 varchar(30)  comment '',
+   IsCurrent            boolean,
    TENHOCKI             varchar(20)  comment '',
    NAM                  varchar(20)  comment '',
    HKBATDAU             date  comment '',
@@ -85,7 +86,6 @@ create table LOP
    MALOP                varchar(30) not null  comment '',
    TONGSV               int  comment '',
    TONGNAM              int  comment '',
-   TONGNU               int  comment '',
    primary key (MALOP)
 );
 
@@ -134,19 +134,24 @@ alter table KQDKHP add constraint FK_KQDKHP_RELATIONS_SINH_VIEN foreign key (MAS
 alter table KQDKHP add constraint FK_KQDKHP_RELATIONS_HOC_PHAN foreign key (MAHP)
       references HOC_PHAN (MAHP) on delete restrict on update restrict;
 
-alter table SINH_VIEN add constraint FK_SINH_VIE_THUOC_LOP_LOP foreign key (MALOP)
+alter table SINH_VIEN add constraint FK_SINH_VIEN_THUOC_LOP_LOP foreign key (MALOP)
       references LOP (MALOP) on delete restrict on update restrict;
 
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('18CTT1', '110', '90', '20');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('18CTT2', '120', '60', '60');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('18CTT3', '130', '70', '60');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('18CTT4', '120', '80', '40');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('18CTT5', '131', '40', '91');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('19CTT1', '121', '40', '81');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('19CTT2', '132', '80', '52');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('19CTT3', '130', '60', '80');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('19CTT4', '150', '90', '60');
-INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`, `TONGNU`) VALUES ('19CTT5', '130', '100', '30');
+
+alter table DOT_DK_HP add constraint FK_DOTDKHP_THUOC_HOCKI foreign key (MAHOCKI)
+      references HOC_KI (MAHOCKI) on delete restrict on update restrict;
+
+
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('18CTT1', '110', '90');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('18CTT2', '120', '60');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('18CTT3', '130', '70');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('18CTT4', '120', '80');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('18CTT5', '131', '40');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('19CTT1', '121', '40');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('19CTT2', '132', '80');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('19CTT3', '130', '60');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('19CTT4', '150', '90');
+INSERT INTO `quanlysinhvien`.`lop` (`MALOP`, `TONGSV`, `TONGNAM`) VALUES ('19CTT5', '130', '100');
 
 
 INSERT INTO `quanlysinhvien`.`sinh_vien` (`MASV`, `MALOP`, `TENSV`, `SDT`, `MKSV`, `DIACHISV`, `EMAILSV`) VALUES ('18120629', '18CTT5', 'Tran Van Tu', '0961050667', '123', 'Ha Noi', '18120629@student.hcmus.edu.vn');
@@ -174,13 +179,15 @@ INSERT INTO `quanlysinhvien`.`mon_hoc` (`MAMH`, `TENMH`, `SOTINCHI`) VALUES ('CS
 INSERT INTO `quanlysinhvien`.`mon_hoc` (`MAMH`, `TENMH`, `SOTINCHI`) VALUES ('CSC10008', 'Kiến tập nghê nghiệp', '2');
 
 
-INSERT INTO `quanlysinhvien`.`dot_dk_hp` (`MADOT`, `STTDOT`, `TGBATDAU`, `TGKETTHUC`) VALUES ('D1', '1', '2021-01-01 08:00:00', '2021-01-15 23:59:59');
-INSERT INTO `quanlysinhvien`.`dot_dk_hp` (`MADOT`, `STTDOT`, `TGBATDAU`, `TGKETTHUC`) VALUES ('D2', '2', '2021-02-01 08:00:00', '2021-02-15 23:59:59');
-INSERT INTO `quanlysinhvien`.`dot_dk_hp` (`MADOT`, `STTDOT`, `TGBATDAU`, `TGKETTHUC`) VALUES ('D3', '3', '2021-03-01 08:00:00', '2021-03-15 23:59:59');
 
 
-INSERT INTO `quanlysinhvien`.`hoc_ki` (`MAHOCKI`, `TKGV`, `TENHOCKI`, `NAM`, `HKBATDAU`, `HKKETTHUC`) VALUES ('HK1-2021', 'giaovu@gmail.com', 'Học kỳ 1', '2021', '2021-01-10', '2021-05-01');
-INSERT INTO `quanlysinhvien`.`hoc_ki` (`MAHOCKI`, `TKGV`, `TENHOCKI`, `NAM`, `HKBATDAU`, `HKKETTHUC`) VALUES ('HK2-2021', 'giaovu@gmail.com', 'Học kỳ 2', '2021', '2021-07-11', '2008-11-11');
+INSERT INTO `quanlysinhvien`.`hoc_ki` (`MAHOCKI`, `TENHOCKI`, `NAM`, `HKBATDAU`, `HKKETTHUC`,`IsCurrent`) VALUES ('HK1-2021', 'Học kỳ 1', '2021', '2021-01-10', '2021-05-01','0');
+INSERT INTO `quanlysinhvien`.`hoc_ki` (`MAHOCKI`, `TENHOCKI`, `NAM`, `HKBATDAU`, `HKKETTHUC`,`IsCurrent`) VALUES ('HK2-2021',  'Học kỳ 2', '2021', '2021-07-11', '2008-11-11','1');
+
+
+INSERT INTO `quanlysinhvien`.`dot_dk_hp` (`MADOT`, `STTDOT`, `TGBATDAU`, `TGKETTHUC`,`MAHOCKI`) VALUES ('D1', '1', '2021-01-01 08:00:00', '2021-01-15 23:59:59','HK1-2021');
+INSERT INTO `quanlysinhvien`.`dot_dk_hp` (`MADOT`, `STTDOT`, `TGBATDAU`, `TGKETTHUC`,`MAHOCKI`) VALUES ('D2', '2', '2021-02-01 08:00:00', '2021-02-15 23:59:59','HK2-2021');
+INSERT INTO `quanlysinhvien`.`dot_dk_hp` (`MADOT`, `STTDOT`, `TGBATDAU`, `TGKETTHUC`,`MAHOCKI`) VALUES ('D3', '3', '2021-03-01 08:00:00', '2021-03-15 23:59:59','HK2-2021');
 
 
 INSERT INTO `quanlysinhvien`.`hoc_phan` (`TENGVLT`, `THU`, `SLOT`, `CA`, `TENPHONG`, `MAHP`, `MALOP`, `MAHOCKI`, `MADOT`, `MAMH`) VALUES ('Thái Hùng Văn', '4', '100', '1', 'E101', 'HP01', '18-21', 'HK1-2021', 'D1', 'CSC10001');
