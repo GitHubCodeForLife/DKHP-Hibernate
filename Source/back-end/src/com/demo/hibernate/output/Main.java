@@ -53,7 +53,7 @@ public class Main {
 //			System.out.println(svs.get(i).toString());
 //		}
 //		svDao.login("18120629", "123");
-//		System.out.println(SinhVienDao.layThongTinSinhVien("18120629"));
+//		System.out.println(SinhVienDao.layThongTinSinhVien("18120629").getLop());
 //		SinhVien sv = svDao.layThongTinSinhVien("18120629");
 //		sv.setMaSV("18120123");
 //		svDao.themSinhVien(sv);
@@ -63,23 +63,57 @@ public class Main {
 //		}
 
 //		LopDao ld = new LopDao();
-////		List<Lop> lops = ld.layDanhSachLop();
-////		for (int i = 0; i < lops.size(); i++) {s
-////			System.out.println(lops.get(i).toString());
-////		}
+//////		List<Lop> lops = ld.layDanhSachLop();
+//////		for (int i = 0; i < lops.size(); i++) {
+//////			System.out.println(lops.get(i).toString());
+//////		}
 //		Lop lop = new Lop("17CTT2", 100, 120);
-//		ld.xaoLopHoc(lop.getMaLop());
-
+//		System.out.println("List Sinh Vien theo LOP");
+//		List<SinhVien> lists = ld.layThongTinLop("18CTT5").getSinhViens();
+//		for (int i = 0; i < lists.size(); i++) {
+//			System.out.println(lists.get(i));
+//		}
 //		HocKiDao hkd = new HocKiDao();
+//		List<HocKi> lists1 = hkd.layDanhSachHocKi();
+//		for (int i = 0; i < lists1.size(); i++) {
+//			System.out.println(lists1.get(i));
+//		}
+//
+//		List<DotDKHP> lists = hkd.layHocKiHienTai().getDotDKHPs();
+//		for (int i = 0; i < lists.size(); i++) {
+//			System.out.println(lists.get(i));
+//		}
 //		hkd.setCurrentHocKi("HK2-2021");
 
 //		MonHocDao mhDao = new MonHocDao();
-//		List<MonHoc> lists = mhDao.timKiemMonHoc("Toan");
+//		List<HocPhan> lists = MonHocDao.layThongTinMonHoc("CSC10001").getHocPhans();
+//		// List<MonHoc> lists = mhDao.timKiemMonHoc("Toan");
 //		for (int i = 0; i < lists.size(); i++) {
 //			System.out.println(lists.get(i));
 //		}
 //		System.out.println(mhDao.layThongTinMonHoc("CSC10001"));
 
+//		DotDKHPDao d = new DotDKHPDao();
+//		List<DotDKHP> lists = d.layDanhSachDotDKHP();
+//		for (int i = 0; i < lists.size(); i++) {
+//			System.out.println(lists.get(i));
+//		}
+//		List<HocPhan> lists = DotDKHPDao.layThongTinDotDKHP("D1").getHocPhans();
+//		for (int i = 0; i < lists.size(); i++) {
+//			System.out.println(lists.get(i));
+//		}
+
+//		// Lay DSHP
+//		HocPhanDao hpd = new HocPhanDao();
+//		List<HocPhan> lists = hpd.timKiemHocPhan("Hp01");
+//		for (int i = 0; i < lists.size(); i++) {
+//			System.out.println(lists.get(i));
+//		}
+//		List<KQDKHP> lists = SinhVienDao.layThongTinSinhVien("18120629").getKqdkhps();
+//		for (int i = 0; i < lists.size(); i++) {
+//			System.out.println(lists.get(i));
+//		}
+		new LoginFrame();
 	}
 
 }

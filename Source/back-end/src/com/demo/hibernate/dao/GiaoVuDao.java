@@ -26,6 +26,8 @@ public class GiaoVuDao {
 		} finally {
 			session.close();
 		}
+		if (gv == null)
+			return null;
 		if (gv.getMKGV().equals(mkgv)) {
 			System.out.println("Login success!");
 			return gv;

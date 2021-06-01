@@ -1,15 +1,19 @@
 package com.demo.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "HOC_KI")
+@Table(name = "hoc_ki")
 public class HocKi implements Serializable {
 	@Id
 	@Column(name = "MAHOCKI")
@@ -24,6 +28,17 @@ public class HocKi implements Serializable {
 	private Date tgKT;
 	@Column(name = "IsCurrent")
 	private boolean isCurrent;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "hocKi")
+	private List<DotDKHP> dotDKHPs = new ArrayList<>();
+
+	public List<DotDKHP> getDotDKHPs() {
+		return dotDKHPs;
+	}
+
+	public void setDotDKHPs(List<DotDKHP> dotDKHPs) {
+		this.dotDKHPs = dotDKHPs;
+	}
 
 	public String getMaHK() {
 		return maHK;

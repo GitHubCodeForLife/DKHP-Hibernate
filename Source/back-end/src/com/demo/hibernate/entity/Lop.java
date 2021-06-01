@@ -1,10 +1,14 @@
 package com.demo.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +21,17 @@ public class Lop implements Serializable {
 	private int tongSV;
 	@Column(name = "TONGNAM")
 	private int tongNam;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "lop")
+	private List<SinhVien> sinhViens = new ArrayList<>();
+
+	public List<SinhVien> getSinhViens() {
+		return sinhViens;
+	}
+
+	public void setSinhViens(List<SinhVien> sinhViens) {
+		this.sinhViens = sinhViens;
+	}
 
 	public String getMaLop() {
 		return maLop;

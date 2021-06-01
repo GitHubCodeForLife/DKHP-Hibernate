@@ -4,11 +4,20 @@
 package com.demo.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "sinh_vien")
@@ -16,9 +25,12 @@ public class SinhVien implements Serializable {
 
 	@Id
 	@Column(name = "MASV")
+	@GeneratedValue(generator = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	private String maSV;
-	@Column(name = "MALOP")
-	private String maLop;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "MALOP", nullable = false)
+	private Lop lop;
 	@Column(name = "TENSV")
 	private String tenSV;
 	@Column(name = "SDT")
@@ -30,6 +42,28 @@ public class SinhVien implements Serializable {
 	@Column(name = "EMAILSV")
 	private String email;
 
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sinhVien")
+	private List<KQDKHP> kqdkhps = new ArrayList<>();
+
+	public List<KQDKHP> getKqdkhps() {
+		return kqdkhps;
+	}
+
+	public void setKqdkhps(List<KQDKHP> kqdkhps) {
+		this.kqdkhps = kqdkhps;
+	}
+
+	public SinhVien(String maSV, Lop lop, String tenSV, String sdt, String matKhau, String diaChi, String email) {
+		super();
+		this.maSV = maSV;
+		this.lop = lop;
+		this.tenSV = tenSV;
+		this.sdt = sdt;
+		this.matKhau = matKhau;
+		this.diaChi = diaChi;
+		this.email = email;
+	}
+
 	public String getMaSV() {
 		return maSV;
 	}
@@ -38,12 +72,12 @@ public class SinhVien implements Serializable {
 		this.maSV = maSV;
 	}
 
-	public String getMaLop() {
-		return maLop;
+	public Lop getLop() {
+		return lop;
 	}
 
-	public void setMaLop(String maLop) {
-		this.maLop = maLop;
+	public void setLop(Lop lop) {
+		this.lop = lop;
 	}
 
 	public String getTenSV() {
@@ -86,25 +120,14 @@ public class SinhVien implements Serializable {
 		this.email = email;
 	}
 
-	public SinhVien(String maSV, String maLop, String tenSV, String sdt, String matKhau, String diaChi, String email) {
-		super();
-		this.maSV = maSV;
-		this.maLop = maLop;
-		this.tenSV = tenSV;
-		this.sdt = sdt;
-		this.matKhau = matKhau;
-		this.diaChi = diaChi;
-		this.email = email;
+	@Override
+	public String toString() {
+		return "SinhVien [maSV=" + maSV + ", lop=" + lop + ", tenSV=" + tenSV + ", sdt=" + sdt + ", matKhau=" + matKhau
+				+ ", diaChi=" + diaChi + ", email=" + email + "]";
 	}
 
 	public SinhVien() {
 		super();
-	}
-
-	@Override
-	public String toString() {
-		return "SinhVien [diaChi=" + diaChi + ", email=" + email + ", maLop=" + maLop + ", maSV=" + maSV + ", matKhau="
-				+ matKhau + ", sdt=" + sdt + ", tenSV=" + tenSV + "]";
 	}
 
 }

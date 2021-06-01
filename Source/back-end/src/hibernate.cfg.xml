@@ -21,6 +21,7 @@
 
       <!-- Echo all executed SQL to stdout -->
        <property name="show_sql">true</property> 
+       <property name="hbm2ddl.auto">create</property>
       
       <!-- Drop and re-create the database schema on startup -->
        <property name="hbm2ddl.auto">update</property> 
@@ -28,6 +29,9 @@
             <mapping class="com.demo.hibernate.entity.Lop"/>
             <mapping class="com.demo.hibernate.entity.SinhVien"/>
             <mapping class="com.demo.hibernate.entity.HocKi"/>
-            <mapping class="com.demo.hibernate.entity.MonHoc"/>
+            <mapping class="com.demo.hibernate.entity.MonHoc"/>  
+            <mapping class="com.demo.hibernate.entity.HocPhan"/>
+            <mapping class="com.demo.hibernate.entity.DotDKHP"/>
+            <mapping class="com.demo.hibernate.entity.KQDKHP"/>
     </session-factory>
 </hibernate-configuration>

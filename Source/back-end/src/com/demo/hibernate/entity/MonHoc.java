@@ -1,10 +1,14 @@
 package com.demo.hibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +21,16 @@ public class MonHoc implements Serializable {
 	private String tenMH;
 	@Column(name = "SOTINCHI")
 	private int soTC;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "monHoc")
+	private List<HocPhan> hocPhans = new ArrayList<>();
+
+	public List<HocPhan> getHocPhans() {
+		return hocPhans;
+	}
+
+	public void setHocPhans(List<HocPhan> hocPhans) {
+		this.hocPhans = hocPhans;
+	}
 
 	public String getMaMH() {
 		return maMH;
