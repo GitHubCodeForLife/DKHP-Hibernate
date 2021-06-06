@@ -101,6 +101,7 @@ public class HocKi implements Serializable {
 		this.nam = nam;
 		this.tgBG = tgBG;
 		this.tgKT = tgKT;
+		this.isCurrent = false;
 	}
 
 	public HocKi() {

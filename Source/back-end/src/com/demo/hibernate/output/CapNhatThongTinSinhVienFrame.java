@@ -12,27 +12,32 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.WindowConstants;
 
 import com.demo.hibernate.dao.LopDao;
 import com.demo.hibernate.dao.SinhVienDao;
 import com.demo.hibernate.entity.Lop;
 import com.demo.hibernate.entity.SinhVien;
 
-public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListener {
+public class CapNhatThongTinSinhVienFrame extends JDialog implements ActionListener {
 	public static int size = 50;
 	JButton quayLaiBtn, xacNhanBtn, changePasswordBtn;
 	JTextField taikhoan, mssv, sdt, malop, email, tenSV, diaChi;
-	JComboBox maLop;
+	JComboBox maLop, gioiTinh;
 	SinhVien _sv;
 	List<Lop> list_lop;
+	JFrame _parent;
 
-	CapNhatThongTinSinhVienFrame(SinhVien sv) {
+	CapNhatThongTinSinhVienFrame(JFrame parent, SinhVien sv) {
+		super(parent, true);
+		_parent = parent;
 		_sv = SinhVienDao.layThongTinSinhVien(sv.getMaSV());
 
 		Container con = this.getContentPane();
@@ -55,8 +60,10 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 
 		// Set Frame attribute
 		this.setTitle("Cap nhat thong tin Sinh Vien Frame");
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.setModal(true);
 		this.pack();
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		// this.setUndecorated(true);
 		this.setVisible(true);
 	}
@@ -228,11 +235,14 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 		// Ma Lop
 		JPanel maLopPanel = createMaLop();
 
+		// Gioi tinh
+		JPanel gioiTinhPanel = createGioiTinh();
 		// Lay out
-		panel.setLayout(new GridLayout(1, 3));
+		panel.setLayout(new GridLayout(1, 4));
 		panel.add(mssvPanel);
 		panel.add(sdtPanel);
 		panel.add(maLopPanel);
+		panel.add(gioiTinhPanel);
 		return panel;
 	}
 
@@ -246,7 +256,7 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 		mssv = new JTextField(_sv.getMaSV(), 10);
 		mssv.setFont(new Font("", Font.PLAIN, 18));
 		mssv.setEditable(false);
-		labelForSlang.setPreferredSize(new Dimension(200, 18));
+//		labelForSlang.setPreferredSize(new Dimension(200, 18));
 		panel.add(labelForSlang);
 		panel.add(mssv);
 		layout.putConstraint(SpringLayout.WEST, labelForSlang, 5, SpringLayout.WEST, panel);
@@ -267,7 +277,7 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 		labelForSlang.setFont(new Font("", Font.PLAIN, 18));
 		sdt = new JTextField(_sv.getSdt(), 10);
 		sdt.setFont(new Font("", Font.PLAIN, 18));
-		labelForSlang.setPreferredSize(new Dimension(200, 18));
+//		labelForSlang.setPreferredSize(new Dimension(200, 18));
 		panel.add(labelForSlang);
 		panel.add(sdt);
 		layout.putConstraint(SpringLayout.WEST, labelForSlang, 5, SpringLayout.WEST, panel);
@@ -282,13 +292,11 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 	JPanel createMaLop() {
 		JPanel panel = new JPanel();
 		// Title
-		JLabel label = new JLabel("     Lớp       ");
+		JLabel label = new JLabel("Lớp");
 		label.setFont(new Font("", Font.PLAIN, 18));
 
-		// Check box
-
-		LopDao ld = new LopDao();
-		list_lop = ld.layDanhSachLop();
+		// Check box);
+		list_lop = LopDao.layDanhSachLop();
 		int pos = 0;
 		String[] lopStrings = new String[list_lop.size()];
 		for (int i = 0; i < list_lop.size(); i++) {
@@ -305,6 +313,28 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 		// Layout
 		panel.add(label);
 		panel.add(maLop);
+
+		return panel;
+	}
+
+	JPanel createGioiTinh() {
+		JPanel panel = new JPanel();
+		// Title
+		JLabel label = new JLabel("     Gender       ");
+		label.setFont(new Font("", Font.PLAIN, 18));
+
+		// Check box
+
+		LopDao ld = new LopDao();
+		int pos = _sv.getGioiTinh() == false ? 0 : 1;
+		String[] lopStrings = { "Nu", "Nam" };
+		gioiTinh = new JComboBox(lopStrings);
+		gioiTinh.setSelectedIndex(pos);
+		gioiTinh.addActionListener(this);
+		gioiTinh.setFont(new Font("", Font.PLAIN, 18));
+		// Layout
+		panel.add(label);
+		panel.add(gioiTinh);
 
 		return panel;
 	}
@@ -341,17 +371,21 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == xacNhanBtn) {
 			// Get source
-			SinhVien sv = new SinhVien();
-			sv.setMaSV(mssv.getText());
-			sv.setSdt(sdt.getText());
-			sv.setLop(list_lop.get(maLop.getSelectedIndex()));
-			sv.setDiaChi(diaChi.getText());
-			sv.setEmail(email.getText());
-			sv.setMatKhau(_sv.getMatKhau());
-			sv.setTenSV(tenSV.getText());
-			System.out.println(sv);
-			SinhVienDao svd = new SinhVienDao();
-			if (svd.updateSinhVien(sv)) {
+			String mssvS = mssv.getText();
+			String tenSVS = tenSV.getText();
+			String sdtS = sdt.getText();
+			String diaChiS = diaChi.getText();
+			Lop lop = list_lop.get(maLop.getSelectedIndex());
+			String emailS = email.getText();
+			Boolean gioiTinhS = gioiTinh.getSelectedIndex() == 0 ? false : true;
+			if (mssvS.isBlank() || tenSVS.isEmpty() || sdtS.isEmpty() || diaChiS.isEmpty() || emailS.isEmpty()
+					|| lop == null) {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin", "Thêm Sinh Viên  thất bại",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			SinhVien sv = new SinhVien(mssvS, lop, tenSVS, sdtS, _sv.getMatKhau(), diaChiS, emailS, gioiTinhS);
+			if (SinhVienDao.updateSinhVien(sv)) {
 				// default title and icon
 				JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công");
 			} else {
@@ -359,21 +393,23 @@ public class CapNhatThongTinSinhVienFrame extends JFrame implements ActionListen
 				JOptionPane.showMessageDialog(this, "Cập nhật thông tin thất bại", "Update Error",
 						JOptionPane.ERROR_MESSAGE);
 				this.dispose();
-				new MainScreenSvFrame(_sv);
 				return;
 			}
 			this.dispose();
-			new MainScreenSvFrame(sv);
 
 		} else if (e.getSource() == quayLaiBtn) {
 			this.dispose();
-			new MainScreenSvFrame(_sv);
 		} else if (e.getSource() == changePasswordBtn) {
 			String s = JOptionPane.showInputDialog(this, "Nhập mật khẩu mới", "Đổi mật khẩu",
 					JOptionPane.PLAIN_MESSAGE);
+			if (s.isEmpty()) {
+				JOptionPane.showMessageDialog(this, "Cập nhật thông tin thất bại", "Update Error",
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			_sv.setMatKhau(s);
-			SinhVienDao svd = new SinhVienDao();
-			if (svd.updateSinhVien(_sv)) {
+
+			if (SinhVienDao.updateSinhVien(_sv)) {
 				// default title and icon
 				JOptionPane.showMessageDialog(this, "Cập nhật thông tin thành công");
 			} else {

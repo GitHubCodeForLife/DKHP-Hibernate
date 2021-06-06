@@ -1,7 +1,9 @@
 package com.demo.hibernate.entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -20,11 +22,8 @@ public class KQDKHP implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MAHP", nullable = false)
 	private HocPhan hocPhan;
-
-	@Override
-	public String toString() {
-		return "KQDKHP [sinhVien=" + sinhVien + ", hocPhan=" + hocPhan + "]";
-	}
+	@Column(name = "TGDANGKY")
+	private LocalDateTime tgDangKy;
 
 	public SinhVien getSinhVien() {
 		return sinhVien;
@@ -42,14 +41,34 @@ public class KQDKHP implements Serializable {
 		this.hocPhan = hocPhan;
 	}
 
+	public KQDKHP() {
+		super();
+	}
+
+	public LocalDateTime getTgDangKy() {
+		return tgDangKy;
+	}
+
+	public void setTgDangKy(LocalDateTime tgDangKy) {
+		this.tgDangKy = tgDangKy;
+	}
+
+	@Override
+	public String toString() {
+		return "KQDKHP [sinhVien=" + sinhVien + ", hocPhan=" + hocPhan + ", tgDangKy=" + tgDangKy + "]";
+	}
+
+	public KQDKHP(SinhVien sinhVien, HocPhan hocPhan, LocalDateTime tgDangKy) {
+		super();
+		this.sinhVien = sinhVien;
+		this.hocPhan = hocPhan;
+		this.tgDangKy = tgDangKy;
+	}
+
 	public KQDKHP(SinhVien sinhVien, HocPhan hocPhan) {
 		super();
 		this.sinhVien = sinhVien;
 		this.hocPhan = hocPhan;
-	}
-
-	public KQDKHP() {
-		super();
 	}
 
 }

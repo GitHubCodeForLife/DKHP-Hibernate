@@ -8,10 +8,11 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import com.demo.hibernate.entity.HocPhan;
+import com.demo.hibernate.entity.KQDKHP;
 import com.demo.hibernate.utility.HibernateUtil;
 
 public class HocPhanDao {
-	public List<HocPhan> layDanhSachHocPhan() {
+	public static List<HocPhan> layDanhSachHocPhan() {
 		Session session = HibernateUtil.getSession();
 		List<HocPhan> result = session.createQuery("from HocPhan", HocPhan.class).getResultList();
 		session.close();
@@ -32,7 +33,7 @@ public class HocPhanDao {
 		return hp;
 	}
 
-	public Boolean updateHocPhan(HocPhan hp) {
+	public static Boolean updateHocPhan(HocPhan hp) {
 		Session session = HibernateUtil.getSession();
 		if (HocPhanDao.layThongTinHocPhan(hp.getMaHP()) == null) {
 			System.out.println("Khong co hoc Phan");
@@ -96,7 +97,7 @@ public class HocPhanDao {
 		return true;
 	}
 
-	public List<HocPhan> timKiemHocPhan(String key) {
+	public static List<HocPhan> timKiemHocPhan(String key) {
 		List<HocPhan> result = null;
 		Session session = HibernateUtil.getSession();
 		try {
@@ -116,6 +117,15 @@ public class HocPhanDao {
 			session.close();
 		}
 		return result;
+	}
+
+	public static void seftUpdadte(HocPhan hp) {
+		List<KQDKHP> list = hp.getKqdkhps();
+		for (int i = 0; i < list.size(); i++)
+			System.out.println(list.get(i));
+		hp.setSlot(hp.getSlotToiDa() - list.size());
+		HocPhanDao.updateHocPhan(hp);
+		System.out.println("Hoc Phan sau khi update: " + hp);
 	}
 
 }

@@ -12,7 +12,7 @@ import com.demo.hibernate.utility.HibernateUtil;
 
 public class MonHocDao {
 
-	public List<MonHoc> layDanhSachMonHoc() {
+	public static List<MonHoc> layDanhSachMonHoc() {
 		Session session = HibernateUtil.getSession();
 		List<MonHoc> result = session.createQuery("from MonHoc", MonHoc.class).getResultList();
 		session.close();
@@ -33,7 +33,7 @@ public class MonHocDao {
 		return mh;
 	}
 
-	public Boolean updateMonHoc(MonHoc mh) {
+	public static Boolean updateMonHoc(MonHoc mh) {
 		Session session = HibernateUtil.getSession();
 		if (MonHocDao.layThongTinMonHoc(mh.getMaMH()) == null) {
 			System.out.println("Khong co mon hoc");
@@ -98,7 +98,7 @@ public class MonHocDao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<MonHoc> timKiemMonHoc(String key) {
+	public static List<MonHoc> timKiemMonHoc(String key) {
 		List<MonHoc> result = null;
 		Session session = HibernateUtil.getSession();
 		try {

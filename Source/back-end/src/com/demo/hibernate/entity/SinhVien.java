@@ -10,14 +10,11 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "sinh_vien")
@@ -25,8 +22,6 @@ public class SinhVien implements Serializable {
 
 	@Id
 	@Column(name = "MASV")
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
 	private String maSV;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MALOP", nullable = false)
@@ -42,6 +37,30 @@ public class SinhVien implements Serializable {
 	@Column(name = "EMAILSV")
 	private String email;
 
+	@Column(name = "GIOITINH")
+	private Boolean gioiTinh;
+
+	public SinhVien(String maSV, Lop lop, String tenSV, String sdt, String matKhau, String diaChi, String email,
+			Boolean gioiTinh) {
+		super();
+		this.maSV = maSV;
+		this.lop = lop;
+		this.tenSV = tenSV;
+		this.sdt = sdt;
+		this.matKhau = matKhau;
+		this.diaChi = diaChi;
+		this.email = email;
+		this.gioiTinh = gioiTinh;
+	}
+
+	public Boolean getGioiTinh() {
+		return gioiTinh;
+	}
+
+	public void setGioiTinh(Boolean gioiTinh) {
+		this.gioiTinh = gioiTinh;
+	}
+
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sinhVien")
 	private List<KQDKHP> kqdkhps = new ArrayList<>();
 
@@ -51,17 +70,6 @@ public class SinhVien implements Serializable {
 
 	public void setKqdkhps(List<KQDKHP> kqdkhps) {
 		this.kqdkhps = kqdkhps;
-	}
-
-	public SinhVien(String maSV, Lop lop, String tenSV, String sdt, String matKhau, String diaChi, String email) {
-		super();
-		this.maSV = maSV;
-		this.lop = lop;
-		this.tenSV = tenSV;
-		this.sdt = sdt;
-		this.matKhau = matKhau;
-		this.diaChi = diaChi;
-		this.email = email;
 	}
 
 	public String getMaSV() {
@@ -123,7 +131,7 @@ public class SinhVien implements Serializable {
 	@Override
 	public String toString() {
 		return "SinhVien [maSV=" + maSV + ", lop=" + lop + ", tenSV=" + tenSV + ", sdt=" + sdt + ", matKhau=" + matKhau
-				+ ", diaChi=" + diaChi + ", email=" + email + "]";
+				+ ", diaChi=" + diaChi + ", email=" + email + ", gioiTinh=" + gioiTinh;
 	}
 
 	public SinhVien() {

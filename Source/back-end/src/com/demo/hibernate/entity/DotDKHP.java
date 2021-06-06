@@ -23,8 +23,6 @@ public class DotDKHP implements Serializable {
 	@Id
 	@Column(name = "MADOT")
 	private String maDot;
-	@Column(name = "STTDOT")
-	private int stt;
 	@Column(name = "TGBATDAU")
 	private LocalDateTime tbBD;
 	@Column(name = "TGKETTHUC")
@@ -53,14 +51,6 @@ public class DotDKHP implements Serializable {
 		this.maDot = maDot;
 	}
 
-	public int getStt() {
-		return stt;
-	}
-
-	public void setStt(int stt) {
-		this.stt = stt;
-	}
-
 	public LocalDateTime getTbBD() {
 		return tbBD;
 	}
@@ -87,14 +77,12 @@ public class DotDKHP implements Serializable {
 
 	@Override
 	public String toString() {
-		return "DotDKHP [maDot=" + maDot + ", stt=" + stt + ", tbBD=" + tbBD + ", tbKT=" + tbKT + ", hocKi=" + hocKi
-				+ "]";
+		return "DotDKHP [maDot=" + maDot + ", tbBD=" + tbBD + ", tbKT=" + tbKT + ", hocKi=" + hocKi;
 	}
 
-	public DotDKHP(String maDot, int stt, LocalDateTime tbBD, LocalDateTime tbKT, HocKi hocKi) {
+	public DotDKHP(String maDot, LocalDateTime tbBD, LocalDateTime tbKT, HocKi hocKi) {
 		super();
 		this.maDot = maDot;
-		this.stt = stt;
 		this.tbBD = tbBD;
 		this.tbKT = tbKT;
 		this.hocKi = hocKi;

@@ -15,7 +15,7 @@ import com.demo.hibernate.utility.HibernateUtil;
 
 public class GiaoVuDao {
 
-	public GiaoVu login(String tkgv, String mkgv) {
+	public static GiaoVu login(String tkgv, String mkgv) {
 		GiaoVu gv = null;
 		Session session = HibernateUtil.getSession();
 		try {
@@ -35,7 +35,7 @@ public class GiaoVuDao {
 		return null;
 	}
 
-	public List<GiaoVu> layDanhSachGiaoVu() {
+	public static List<GiaoVu> layDanhSachGiaoVu() {
 		Session session = HibernateUtil.getSession();
 		List<GiaoVu> result = session.createQuery("from GiaoVu", GiaoVu.class).getResultList();
 		session.close();
@@ -56,7 +56,7 @@ public class GiaoVuDao {
 		return gv;
 	}
 
-	public Boolean updateGiaoVu(GiaoVu gv) {
+	public static Boolean updateGiaoVu(GiaoVu gv) {
 		Session session = HibernateUtil.getSession();
 		if (GiaoVuDao.layThongTinGiaoVu(gv.getTKGV()) == null) {
 			System.out.println("Khong co giao vu");
@@ -120,7 +120,7 @@ public class GiaoVuDao {
 		return true;
 	}
 
-	public void resetMatKhau(String tkgv) {
+	public static void resetMatKhau(String tkgv) {
 		Session session = HibernateUtil.getSession();
 		GiaoVu gv = GiaoVuDao.layThongTinGiaoVu(tkgv);
 		if (gv == null) {
@@ -143,14 +143,16 @@ public class GiaoVuDao {
 		System.out.println("reset passswork successfully!");
 	}
 
-	public List<GiaoVu> timKiemGiaoVu(String key) {
+	public static List<GiaoVu> timKiemGiaoVu(String key) {
 		List<GiaoVu> result = null;
 		Session session = HibernateUtil.getSession();
 		try {
-			String hql = "select gv from GiaoVu gv where TKGV like concat('%',:tkgv,'%') or TENGV like concat('%',:tengv,'%')";
+			String hql = "select gv from GiaoVu gv where TKGV like concat('%',:tkgv,'%') or TENGV like concat('%',:tengv,'%') or "
+					+ "DIACHIGV like concat('%',:diachi,'%')";
 			Query query = session.createQuery(hql);
 			query.setParameter("tkgv", key);
 			query.setParameter("tengv", key);
+			query.setParameter("diachi", key);
 			result = query.list();
 		} catch (HibernateException ex) {
 			// Log the exception

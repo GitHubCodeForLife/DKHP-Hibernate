@@ -36,6 +36,8 @@ public class HocPhan implements Serializable {
 	private String tenPhong;
 	@Column(name = "MALOP")
 	private String maLop;
+	@Column(name = "SLOTTOIDA")
+	private int slotToiDa;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MAMH", nullable = false)
 	private MonHoc monHoc;
@@ -58,7 +60,16 @@ public class HocPhan implements Serializable {
 	@Override
 	public String toString() {
 		return "HocPhan [maHP=" + maHP + ", tenGVLT=" + tenGVLT + ", thu=" + thu + ", slot=" + slot + ", ca=" + ca
-				+ ", tenPhong=" + tenPhong + ", maLop=" + maLop + ", monHoc=" + monHoc + ", dotDKHP=" + dotDKHP + "]";
+				+ ", tenPhong=" + tenPhong + ", maLop=" + maLop + ", slotToiDa=" + slotToiDa + ", monHoc=" + monHoc
+				+ ", dotDKHP=" + dotDKHP + "]";
+	}
+
+	public int getSlotToiDa() {
+		return slotToiDa;
+	}
+
+	public void setSlotToiDa(int slotToiDa) {
+		this.slotToiDa = slotToiDa;
 	}
 
 	public String getMaHP() {
@@ -133,8 +144,8 @@ public class HocPhan implements Serializable {
 		this.dotDKHP = dotDKHP;
 	}
 
-	public HocPhan(String maHP, String tenGVLT, int thu, int slot, int ca, String tenPhong, String maLop, MonHoc monHoc,
-			DotDKHP dotDKHP) {
+	public HocPhan(String maHP, String tenGVLT, int thu, int slot, int ca, String tenPhong, String maLop, int slotToiDa,
+			MonHoc monHoc, DotDKHP dotDKHP) {
 		super();
 		this.maHP = maHP;
 		this.tenGVLT = tenGVLT;
@@ -143,6 +154,7 @@ public class HocPhan implements Serializable {
 		this.ca = ca;
 		this.tenPhong = tenPhong;
 		this.maLop = maLop;
+		this.slotToiDa = slotToiDa;
 		this.monHoc = monHoc;
 		this.dotDKHP = dotDKHP;
 	}

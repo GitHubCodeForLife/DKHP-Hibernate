@@ -33,8 +33,8 @@ public class KQDKHPDao {
 		try {
 			transaction = session.beginTransaction();
 			session.save(kq);
-
 			transaction.commit();
+
 		} catch (HibernateException ex) {
 			// Log the exception
 			transaction.rollback();
@@ -42,6 +42,8 @@ public class KQDKHPDao {
 		} finally {
 			session.close();
 		}
+		System.out.println("Khong chay dong nay");
+		HocPhanDao.seftUpdadte(kq.getHocPhan());
 		return true;
 	}
 
@@ -56,6 +58,7 @@ public class KQDKHPDao {
 			transaction = session.beginTransaction();
 			session.delete(kq);
 			transaction.commit();
+
 		} catch (HibernateException ex) {
 			// Log the exception
 			transaction.rollback();
@@ -63,10 +66,11 @@ public class KQDKHPDao {
 		} finally {
 			session.close();
 		}
+
 		return true;
 	}
 
-	public Boolean updateKQDKHP(KQDKHP kq) {
+	public static Boolean updateKQDKHP(KQDKHP kq) {
 		Session session = HibernateUtil.getSession();
 		if (KQDKHPDao.layThongTinKQDKHP(kq.getHocPhan(), kq.getSinhVien()) == null) {
 			System.out.println("Khong co giao vu");
@@ -77,6 +81,7 @@ public class KQDKHPDao {
 			transaction = session.beginTransaction();
 			session.update(kq);
 			transaction.commit();
+
 		} catch (HibernateException ex) {
 			// Log the exception
 			transaction.rollback();
@@ -84,7 +89,7 @@ public class KQDKHPDao {
 		} finally {
 			session.close();
 		}
-		System.out.println("Update successfully!");
+
 		return true;
 
 	}

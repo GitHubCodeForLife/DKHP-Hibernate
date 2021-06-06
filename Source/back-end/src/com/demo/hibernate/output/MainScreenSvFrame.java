@@ -24,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.demo.hibernate.dao.SinhVienDao;
 import com.demo.hibernate.entity.SinhVien;
 
 public class MainScreenSvFrame extends JFrame implements ActionListener {
@@ -34,15 +35,15 @@ public class MainScreenSvFrame extends JFrame implements ActionListener {
 	SinhVien _sv;
 
 	MainScreenSvFrame(SinhVien sv) {
-		_sv = sv;
+		_sv = SinhVienDao.layThongTinSinhVien(sv.getMaSV());
 		dim = Toolkit.getDefaultToolkit().getScreenSize();
 		System.out.println(dim.getSize());
 
 		// Set layout and component on Frame
 		Container con = this.getContentPane();
 		con.setLayout(new BorderLayout());
-		JPanel JNavbarTop = navbarTop(sv.getTenSV());
-		JPanel JNavbarSide = navbarSide(sv.getTenSV());
+		JPanel JNavbarTop = navbarTop(_sv.getTenSV());
+		JPanel JNavbarSide = navbarSide(_sv.getTenSV());
 		JPanel JContent = content();
 
 		JNavbarSide.setSize(new Dimension(300, 100));
@@ -242,11 +243,12 @@ public class MainScreenSvFrame extends JFrame implements ActionListener {
 			new LoginFrame();
 			this.dispose();
 		} else if (e.getSource() == account_top) {
-			new CapNhatThongTinSinhVienFrame(_sv);
+			new CapNhatThongTinSinhVienFrame(this, _sv);
 			this.dispose();
+			new MainScreenSvFrame(_sv);
 		} else if (e.getSource() == account_side) {
-			new CapNhatThongTinSinhVienFrame(_sv);
-			this.dispose();
+			new CapNhatThongTinSinhVienFrame(this, _sv);
+
 		} else if (e.getSource() == dkhp_side) {
 			this.dispose();
 			new DKHPSVFrame(_sv);

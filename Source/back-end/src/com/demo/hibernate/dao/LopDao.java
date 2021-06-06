@@ -7,10 +7,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.demo.hibernate.entity.Lop;
+import com.demo.hibernate.entity.SinhVien;
 import com.demo.hibernate.utility.HibernateUtil;
 
 public class LopDao {
-	public List<Lop> layDanhSachLop() {
+	public static List<Lop> layDanhSachLop() {
 		Session session = HibernateUtil.getSession();
 		List<Lop> result = session.createQuery("from Lop", Lop.class).getResultList();
 		session.close();
@@ -70,6 +71,42 @@ public class LopDao {
 			session.close();
 		}
 		return true;
+	}
+
+	public static Boolean updateLop(Lop lop) {
+		Session session = HibernateUtil.getSession();
+		if (LopDao.layThongTinLop(lop.getMaLop()) == null) {
+			System.out.println("Khong co giao vu");
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.update(lop);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		System.out.println("Update successfully!");
+		return true;
+
+	}
+
+	public static void seftUpdate(Lop lop) {
+		List<SinhVien> list = lop.getSinhViens();
+		int nam = 0;
+		int tong = list.size();
+		for (int i = 0; i < tong; i++) {
+			if (list.get(i).getGioiTinh() == true)
+				nam++;
+		}
+		lop.setTongNam(nam);
+		lop.setTongSV(tong);
+		LopDao.updateLop(lop);
 	}
 
 }

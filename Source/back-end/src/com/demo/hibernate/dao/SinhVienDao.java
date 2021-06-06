@@ -11,7 +11,7 @@ import com.demo.hibernate.entity.SinhVien;
 import com.demo.hibernate.utility.HibernateUtil;
 
 public class SinhVienDao {
-	public SinhVien login(String mssv, String mk) {
+	public static SinhVien login(String mssv, String mk) {
 		SinhVien sv = null;
 		Session session = HibernateUtil.getSession();
 		try {
@@ -31,7 +31,7 @@ public class SinhVienDao {
 		return null;
 	}
 
-	public List<SinhVien> layDanhSachSinhVien() {
+	public static List<SinhVien> layDanhSachSinhVien() {
 		Session session = HibernateUtil.getSession();
 		List<SinhVien> result = session.createQuery("from SinhVien", SinhVien.class).getResultList();
 		session.close();
@@ -52,7 +52,7 @@ public class SinhVienDao {
 		return sv;
 	}
 
-	public Boolean updateSinhVien(SinhVien sv) {
+	public static Boolean updateSinhVien(SinhVien sv) {
 		Session session = HibernateUtil.getSession();
 		if (SinhVienDao.layThongTinSinhVien(sv.getMaSV()) == null) {
 			System.out.println("Khong co giao vu");
@@ -70,6 +70,8 @@ public class SinhVienDao {
 		} finally {
 			session.close();
 		}
+//		// update lop
+		LopDao.seftUpdate(sv.getLop());
 		System.out.println("Update successfully!");
 		return true;
 
@@ -93,6 +95,8 @@ public class SinhVienDao {
 		} finally {
 			session.close();
 		}
+//		// update lop
+		LopDao.seftUpdate(sv.getLop());
 		return true;
 	}
 
@@ -113,15 +117,17 @@ public class SinhVienDao {
 		} finally {
 			session.close();
 		}
+//		// update lop
+		LopDao.seftUpdate(sv.getLop());
 		return true;
 	}
 
-	public void resetMatKhau(String mssv) {
+	public static boolean resetMatKhau(String mssv) {
 		Session session = HibernateUtil.getSession();
 		SinhVien sv = SinhVienDao.layThongTinSinhVien(mssv);
 		if (sv == null) {
 			System.out.println("Khong co sinh vien");
-			return;
+			return false;
 		}
 		sv.setMatKhau("123");
 		Transaction transaction = null;
@@ -137,9 +143,10 @@ public class SinhVienDao {
 			session.close();
 		}
 		System.out.println("reset passswork successfully!");
+		return true;
 	}
 
-	public List<SinhVien> timKiemSinhVien(String key) {
+	public static List<SinhVien> timKiemSinhVien(String key) {
 		List<SinhVien> result = null;
 		Session session = HibernateUtil.getSession();
 		try {

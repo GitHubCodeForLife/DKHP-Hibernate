@@ -328,9 +328,13 @@ public class XemHPDaDKFrame extends JFrame implements ActionListener {
 			this.dispose();
 			new LoginFrame();
 		} else if (e.getSource() == account_top) {
-			JOptionPane.showMessageDialog(this, "Account Top");
+			new CapNhatThongTinSinhVienFrame(this, _sv);
+			this.dispose();
+			new MainScreenSvFrame(_sv);
 		} else if (e.getSource() == account_side) {
-			JOptionPane.showMessageDialog(this, "Account Side");
+			new CapNhatThongTinSinhVienFrame(this, _sv);
+			this.dispose();
+			new MainScreenSvFrame(_sv);
 		} else if (e.getSource() == dkhp_side) {
 			this.dispose();
 			new DKHPSVFrame(_sv);

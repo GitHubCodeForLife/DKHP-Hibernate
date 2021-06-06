@@ -63,4 +63,24 @@ public class DotDKHPDao {
 		return true;
 	}
 
+	public static boolean xaoDotDKHP(String maDot) {
+		Session session = HibernateUtil.getSession();
+		DotDKHP dot = DotDKHPDao.layThongTinDotDKHP(maDot);
+		if (dot == null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(dot);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
 }

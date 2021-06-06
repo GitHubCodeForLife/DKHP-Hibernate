@@ -157,7 +157,7 @@ public class LoginFrame extends JFrame implements ActionListener, KeyListener {
 		String matKhauText = matkhau.getText();
 		if (taikhoan.getText().isEmpty() || matkhau.getText().isEmpty()) {
 			// custom title, warning icon
-			JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu", "Inane warning",
+			JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu", "Đăng nhập thất bại",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
@@ -165,6 +165,8 @@ public class LoginFrame extends JFrame implements ActionListener, KeyListener {
 		GiaoVuDao gvdao = new GiaoVuDao();
 		GiaoVu gv = gvdao.login(taiKhoanText, matKhauText);
 		if (gv != null) {
+			new MainScreenGVFrame(gv);
+			this.dispose();
 			return;
 		}
 		// Sinh Vien dang nhap

@@ -11,7 +11,7 @@ import com.demo.hibernate.entity.HocKi;
 import com.demo.hibernate.utility.HibernateUtil;
 
 public class HocKiDao {
-	public List<HocKi> layDanhSachHocKi() {
+	public static List<HocKi> layDanhSachHocKi() {
 		Session session = HibernateUtil.getSession();
 		List<HocKi> result = session.createQuery("from HocKi", HocKi.class).getResultList();
 		session.close();
@@ -32,7 +32,7 @@ public class HocKiDao {
 		return hk;
 	}
 
-	public Boolean updateHocKi(HocKi hk) {
+	public static Boolean updateHocKi(HocKi hk) {
 		Session session = HibernateUtil.getSession();
 		if (HocKiDao.layThongTinHocKi(hk.getMaHK()) == null) {
 			System.out.println("Khong co giao vu");
@@ -93,15 +93,37 @@ public class HocKiDao {
 		return result;
 	}
 
-	public void setCurrentHocKi(String maHK) {
+	public static boolean themHocKi(HocKi hk) {
+		Session session = HibernateUtil.getSession();
+		if (HocKiDao.layThongTinHocKi(hk.getMaHK()) != null) {
+			return false;
+		}
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.save(hk);
+			transaction.commit();
+		} catch (HibernateException ex) {
+			// Log the exception
+			transaction.rollback();
+			System.err.println(ex);
+		} finally {
+			session.close();
+		}
+		return true;
+	}
+
+	public static boolean setCurrentHocKi(String maHK) {
 		HocKi hk1 = HocKiDao.layThongTinHocKi(maHK);
 		hk1.setCurrent(true);
 		HocKi hk2 = HocKiDao.layHocKiHienTai();
 		hk2.setCurrent(false);
 
-		this.updateHocKi(hk2);
-		this.updateHocKi(hk1);
-
+		if (!HocKiDao.updateHocKi(hk2))
+			return false;
+		if (!HocKiDao.updateHocKi(hk1))
+			return false;
+		return true;
 	}
 
 }

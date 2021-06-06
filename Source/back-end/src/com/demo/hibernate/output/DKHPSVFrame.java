@@ -140,12 +140,12 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 		// System.out.println(dot);
 
 		// Data
-		String[] columnNames1 = { "Mã HP", "Tên Môn Học", "Tên GVLT", "Mã lớp", "Số TC", "Slot", "Lịch học ",
-				"Hủy Đăng Ký" };
+		String[] columnNames1 = { "Mã HP", "Tên Môn Học", "Tên GVLT", "Mã lớp", "Số TC", "Đã đăng ký", "Sĩ số",
+				"Lịch học ", "Hủy Đăng Ký" };
 		Object[][] data1 = layMonDaDangKy(dot);
 
-		String[] columnNames2 = { "Mã HP", "Tên Môn Học", "Tên GVLT", "Mã lớp", "Số TC", "Slot", "Lịch học ",
-				"Đăng ký" };
+		String[] columnNames2 = { "Mã HP", "Tên Môn Học", "Tên GVLT", "Mã lớp", "Số TC", "Đã đăng ký", "Sĩ số",
+				"Lịch học ", "Đăng ký" };
 		Object[][] data2 = layMonDuocPhepDangKy(dot, data1);
 
 		JPanel JContent = new JPanel();
@@ -292,7 +292,7 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 				switch (column) {
 				case 4:
 					return Integer.class;
-				case 7:
+				case 8:
 					return Boolean.class;
 				default:
 					return String.class;
@@ -304,7 +304,7 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 				/*
 				 * Set the 7th column as editable and rest non- editable
 				 */
-				if (column == 7) {
+				if (column == 8) {
 					return true;
 				} else {
 					return false;
@@ -313,8 +313,9 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 		};
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		table.setRowHeight(30);
-		table.getColumnModel().getColumn(1).setPreferredWidth(300);
-		table.getColumnModel().getColumn(6).setPreferredWidth(200);
+		table.getColumnModel().getColumn(1).setPreferredWidth(200);
+		table.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table.getColumnModel().getColumn(7).setPreferredWidth(200);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		for (int i = 0; i < columnNames.length - 1; i++) {
@@ -346,6 +347,8 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 		List<Object[]> listHP = new ArrayList<>();
 		for (int i = 0; i < listsDaDK.size(); i++) {
 			HocPhan hp = listsDaDK.get(i).getHocPhan();
+			HocPhanDao.seftUpdadte(hp);
+
 			if (hp.getDotDKHP().getMaDot().equals(dot.getMaDot())) {
 				String lichhoc = null;
 				if (hp.getCa() == 1) {
@@ -358,7 +361,7 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 					lichhoc = "T" + hp.getThu() + "(15h30-17h30)-" + "P." + hp.getTenPhong();
 				}
 				Object[] temp = { hp.getMaHP(), hp.getMonHoc().getTenMH(), hp.getTenGVLT(), hp.getMaLop(),
-						hp.getMonHoc().getSoTC(), hp.getSlot(), lichhoc, false };
+						hp.getMonHoc().getSoTC(), hp.getSlotToiDa() - hp.getSlot(), hp.getSlotToiDa(), lichhoc, false };
 				listHP.add(temp);
 				System.out.println("Hoc Phan Da DK" + hp);
 				soTC += hp.getMonHoc().getSoTC();
@@ -380,12 +383,15 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 				if (listsHP.get(i).getMaHP().equals(data1[j][0])) {
 					listsHP.remove(i);
 					i--;
+					break;
 				}
 			}
 		}
 		List<Object[]> listHP = new ArrayList<>();
 		for (int i = 0; i < listsHP.size(); i++) {
 			HocPhan hp = listsHP.get(i);
+			HocPhanDao.seftUpdadte(hp);
+
 			String lichhoc = null;
 			if (hp.getCa() == 1) {
 				lichhoc = "T" + hp.getThu() + "(7h30-9h30)-" + "P." + hp.getTenPhong();
@@ -397,7 +403,7 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 				lichhoc = "T" + hp.getThu() + "(15h30-17h30)-" + "P." + hp.getTenPhong();
 			}
 			Object[] temp = { hp.getMaHP(), hp.getMonHoc().getTenMH(), hp.getTenGVLT(), hp.getMaLop(),
-					hp.getMonHoc().getSoTC(), hp.getSlot(), lichhoc, false };
+					hp.getMonHoc().getSoTC(), hp.getSlotToiDa() - hp.getSlot(), hp.getSlotToiDa(), lichhoc, false };
 			listHP.add(temp);
 			System.out.println("Hoc Phan Da DK" + hp);
 		}
@@ -415,11 +421,13 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 			this.dispose();
 			new LoginFrame();
 		} else if (e.getSource() == account_top) {
-			new CapNhatThongTinSinhVienFrame(_sv);
+			new CapNhatThongTinSinhVienFrame(this, _sv);
 			this.dispose();
+			new MainScreenSvFrame(_sv);
 		} else if (e.getSource() == account_side) {
-			new CapNhatThongTinSinhVienFrame(_sv);
+			new CapNhatThongTinSinhVienFrame(this, _sv);
 			this.dispose();
+			new MainScreenSvFrame(_sv);
 		} else if (e.getSource() == dkhp_side) {
 			JOptionPane.showMessageDialog(this, "DKHP  Side");
 		} else if (e.getSource() == hpddk_side) {
@@ -430,7 +438,7 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 			// Lay mon huy
 			List<HocPhan> huyDK = new ArrayList();
 			for (int i = 0; i < listsDaDK.size(); i++) {
-				if ((boolean) tableMH.getValueAt(i, 7)) {
+				if ((boolean) tableMH.getValueAt(i, 8)) {
 					huyDK.add(listsDaDK.get(i).getHocPhan());
 //					System.out.println(listsDaDK.get(i).getHocPhan());
 				} else {
@@ -440,7 +448,7 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 			// Lay mon dk
 			List<HocPhan> muonDK = new ArrayList();
 			for (int i = 0; i < listsHP.size(); i++) {
-				if ((boolean) tableDK.getValueAt(i, 7)) {
+				if ((boolean) tableDK.getValueAt(i, 8)) {
 					muonDK.add(listsHP.get(i));
 					result.add(listsHP.get(i));
 //					System.out.println(listsHP.get(i));
@@ -470,24 +478,20 @@ public class DKHPSVFrame extends JFrame implements ActionListener {
 				}
 				size_old = lichHoc.size();
 			}
-			KQDKHPDao kqdao = new KQDKHPDao();
 			// Huy DK
 			for (int i = 0; i < huyDK.size(); i++) {
 				KQDKHPDao.xaoKQDKHP(_sv, huyDK.get(i));
-				// Update Slot Hoc Phan
 				HocPhan hp = huyDK.get(i);
 				hp.setSlot(hp.getSlot() + 1);
-				HocPhanDao hpd = new HocPhanDao();
-				hpd.updateHocPhan(hp);
+				HocPhanDao.updateHocPhan(hp);
 			}
 			// Dang Ky
 			for (int i = 0; i < muonDK.size(); i++) {
-				KQDKHPDao.themKQDKHP(new KQDKHP(_sv, muonDK.get(i)));
-				// Update Slot hoc phan
+				KQDKHPDao.themKQDKHP(new KQDKHP(_sv, muonDK.get(i), LocalDateTime.now()));
+//				HocPhanDao.seftUpdadte(muonDK.get(i));
 				HocPhan hp = muonDK.get(i);
 				hp.setSlot(hp.getSlot() - 1);
-				HocPhanDao hpd = new HocPhanDao();
-				hpd.updateHocPhan(hp);
+				HocPhanDao.updateHocPhan(hp);
 			}
 			new XemHPDaDKFrame(_sv);
 			this.dispose();
